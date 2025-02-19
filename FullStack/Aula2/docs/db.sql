@@ -1,0 +1,2 @@
+--O animal aqui errou o banco de dados.
+-- nome da tabela estava errado e a coluna de ID.
