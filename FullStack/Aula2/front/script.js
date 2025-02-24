@@ -35,7 +35,7 @@ fetch('http://localhost:4000/pacientes')
             <td data-label="Id:">${paciente.id_paciente}</td>
             <td data-label="Nome:" contenteditable="true">${paciente.nome}</td>
             <td data-label="CPF:" contenteditable="true">${paciente.cpf}</td>
-            <td data-label="Nascimento:" contenteditable="true">${new Date(paciente.nascimento).toLocaleDateString('pt-BR')}</td>
+            <td data-label="Nascimento:" contenteditable="true">${new Date(paciente.nascimento).toLocaleDateString('pt-br')}</td>
             <td><button onclick="alterar(this)">*</button><button onclick="excluir(${paciente.id_paciente})">-</button></td>
         `;
             tabela.appendChild(linha);
@@ -43,3 +43,52 @@ fetch('http://localhost:4000/pacientes')
     });
 
 //Função que edita um cliente enviando o ID e os dados para o servidor
+function alterar(e){
+    const linha = e.parentNode.parentNode;
+    const id = linha.children[0].innerText;
+
+    const corpo = {
+        nome: nome,
+        cpf: cpf,
+        nascimento: nascimento,
+    }
+    console.log(nascimento);
+    fetch(`http://localhost:4000/pacientes/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(corpo)
+    })
+    .then(response => response.status)
+    .then(status => {
+        if (status === 202) {
+            msg3('Pacientes alterado com sucesso');
+        } else {
+            msg3('Erro ao alterar Pacientes');
+        }
+    });
+}
+
+function excluir(id_paciente) {
+    fetch(`http://localhost:4000/pacientes/${id_paciente}`, {
+        method: 'DELETE'
+    })
+        .then(response => response.status)
+        .then(status => {
+            if (status === 204) {
+                msg3('Pacientes excluído com sucesso');
+            } else {
+                msg3('Erro ao excluir pacientes');
+            }
+        });
+}
+
+//Função para exibir mensagens durante 3 segundos
+function msg3(mensagem) {
+    msg = document.getElementById('msg');
+    msg.innerHTML = mensagem;
+    setTimeout(() => {
+        window.location.reload();
+    }, 1500);
+}

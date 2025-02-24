@@ -31,7 +31,7 @@ function update(req, res) {
         if (error) {
             res.status(500).json('Erro ao alterar paciente');
         } else {
-            res.status(202).json('Paciente alterado com sucesso');
+            res.status(202).json('Paciente alterado com sucesso' + console.log(sql));
         }
     });
 }
